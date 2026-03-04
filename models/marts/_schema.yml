@@ -1,0 +1,11 @@
+version: 2
+models:
+  - name: fact_aggregate
+    columns:
+      - name: location_id
+        tests: [not_null]
+      - name: period_id
+        tests: [not_null]
+      - name: metric_id
+        tests: [not_null]
+  - name: mart_metrics

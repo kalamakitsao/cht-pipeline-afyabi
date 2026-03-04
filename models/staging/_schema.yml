@@ -1,0 +1,66 @@
+version: 2
+models:
+  - name: stg_patient
+    columns:
+      - name: patient_id
+        tests: [unique, not_null]
+  - name: stg_patient_sex_lookup
+    columns:
+      - name: patient_id
+        tests: [unique, not_null]
+  - name: stg_household
+    columns:
+      - name: household_id
+        tests: [unique, not_null]
+  - name: stg_household_visit
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_pregnancy_home_visit
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_postnatal_care_service
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_postnatal_care_service_newborn
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_u5_assessment
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_over_five_assessment
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_death_report
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_immunization
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_immunization_status
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_sha_registration
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_community_event
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_data_record
+    columns:
+      - name: uuid
+        tests: [unique, not_null]
+  - name: stg_contact
+    columns:
+      - name: uuid
+        tests: [unique, not_null]

@@ -1,0 +1,81 @@
+version: 2
+
+sources:
+  - name: "afyabi"
+    schema: "{{ env_var('POSTGRES_SCHEMA', 'afyabi') }}"
+    tables:
+      - name: patient_f_client
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: household
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: household_visit
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: pregnancy_home_visit
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: postnatal_care_service
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: postnatal_care_service_newborn
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: u5_assessment
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: over_five_assessment
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: death_report
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: immunization
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: immunization_status
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: sha_registration
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: community_event
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: data_record
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}
+      - name: contact
+        loaded_at_field: saved_timestamp
+        freshness:
+          warn_after: {count: 2, period: hour}
+          error_after: {count: 6, period: hour}

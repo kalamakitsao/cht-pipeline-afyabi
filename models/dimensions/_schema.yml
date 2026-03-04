@@ -1,0 +1,14 @@
+version: 2
+models:
+  - name: dim_period
+    columns:
+      - name: period_id
+        tests: [unique, not_null]
+  - name: dim_location
+    columns:
+      - name: location_id
+        tests: [unique, not_null]
+  - name: mv_location_hierarchy
+    columns:
+      - name: chp_area_id
+        tests: [unique, not_null]

@@ -1,0 +1,134 @@
+metric_id,metric_name,source_domain,description
+actively_pregnant_women,Actively Pregnant Women,pregnancy,Women currently or newly pregnant
+child_deaths,Child Deaths,death,Deaths of children aged 29 days to 5 years
+child_deaths_female,Child Deaths (Female),death,Female child deaths aged 29 days to 5 years
+child_deaths_male,Child Deaths (Male),death,Male child deaths aged 29 days to 5 years
+children_turning_one,Children Turning One,population,Children aged 11-12 months
+chps_enrolled,CHPs Enrolled,contact,Registered CHP areas
+chps_meeting_target,CHPs Meeting Target,household_visit,CHPs meeting 33% household visit target
+chps_reporting,CHPs Reporting,household_visit,CHPs with at least one household visit
+chps_with_hholds,CHPs With Households,household,CHPs that have assigned households
+currently_pregnant,Currently Pregnant,pregnancy,Women with valid EDD in future
+deliveries,Deliveries,pnc,PNC service count 1 records
+female_referred_for_development_milestones,Female Referred Development Milestones,u5,Female U5 referred for developmental delays
+female_turning_one,Female Children Turning One,population,Female children aged 11-12 months
+first_trimester_pregnancies,First Trimester Pregnancies,pregnancy,New pregnancies in gestational weeks 0-12
+hh_visited,Households Visited,household_visit,Distinct households visited
+households_assessed_sha,Households Assessed SHA,sha,Households assessed for SHA registration
+households_registered,Households Registered,household,Total registered households
+households_registered_on_sha,Households Registered on SHA,sha,Households with SHA registration
+households_with_sha,Households With SHA,sha,Households with active SHA coverage
+male_referred_for_development_milestones,Male Referred Development Milestones,u5,Male U5 referred for developmental delays
+male_turning_one,Male Children Turning One,population,Male children aged 11-12 months
+maternal_deaths,Maternal Deaths,death,Maternal death reports
+monthly_cu_meetings,Monthly CU Meetings,community_event,Community unit monthly meetings
+needs_deworming_follow_up_female,Needs Deworming Follow-up (Female),immunization_status,Female children needing deworming follow-up
+needs_deworming_follow_up_male,Needs Deworming Follow-up (Male),immunization_status,Male children needing deworming follow-up
+needs_follow_up_danger_signs,Needs Follow-up Danger Signs,pnc_newborn,Newborns needing danger signs follow-up
+needs_follow_up_missed_visit,Needs Follow-up Missed Visit,pnc_newborn,Newborns needing missed visit follow-up
+neonatal_deaths,Neonatal Deaths,death,Deaths under 29 days
+new_pregnancies,New Pregnancies,pregnancy,Newly registered pregnancies
+new_pregnant_women_referred_anc,New Pregnant Women Referred ANC,pregnancy,New pregnancies referred for ANC
+new_teen_pregnancies,New Teen Pregnancies,pregnancy,New pregnancies ages 10-19
+new_teen_pregnant_women_referred_anc,New Teen Pregnant Women Referred ANC,pregnancy,Teen pregnancies referred for ANC
+newborns,Newborns,pnc_newborn,Distinct newborns in PNC
+newborns_needing_follow_up,Newborns Needing Follow-up,pnc_newborn,Newborns needing any follow-up
+newborns_needing_follow_up_danger_signs,Newborns Needing Follow-up Danger Signs,pnc_newborn,Newborns with danger signs follow-up needed
+newborns_needing_follow_up_missed_visit,Newborns Needing Follow-up Missed Visit,pnc_newborn,Newborns with missed visit follow-up needed
+other_community_events,Other Community Events,community_event,Non-monthly-meeting community events
+over_5_assessments,Over 5 Assessments,over_five,Total over-5 assessment records
+over_5_deaths_female,Over 5 Deaths (Female),death,Female deaths over 5 years
+over_5_deaths_male,Over 5 Deaths (Male),death,Male deaths over 5 years
+over_5_referred,Over 5 Referred,over_five,Over-5 patients referred
+over_5_referred_female,Over 5 Referred (Female),over_five,Female over-5 patients referred
+over_5_referred_male,Over 5 Referred (Male),over_five,Male over-5 patients referred
+people_served,People Served,data_record,Distinct patients with records
+population,Population,population,Total unmuted population
+population_female,Population (Female),population,Female unmuted population
+population_male,Population (Male),population,Male unmuted population
+population_under_5_female,Population Under 5 (Female),population,Female unmuted population under 5
+population_under_5_male,Population Under 5 (Male),population,Male unmuted population under 5
+pregnant_women_referred,Pregnant Women Referred,pregnancy,Pregnant women referred
+pregnant_women_referred_missed_anc,Pregnant Women Referred Missed ANC,pregnancy,Pregnant women referred for missed ANC
+pregnant_women_visited,Pregnant Women Visited,pregnancy,Distinct pregnant women visited
+referred_diabetes,Referred Diabetes,over_five,Patients referred for diabetes
+referred_diabetes_female,Referred Diabetes (Female),over_five,Female patients referred for diabetes
+referred_diabetes_male,Referred Diabetes (Male),over_five,Male patients referred for diabetes
+referred_for_development_milestones,Referred Development Milestones,u5,U5 referred for developmental delays
+referred_for_developmental_delays,Referred Developmental Delays,u5,U5 referred for developmental delays
+referred_for_diarrhoea,Referred for Diarrhoea,u5,U5 with diarrhoea referred
+referred_for_malaria,Referred for Malaria,u5,U5 with fever referred
+referred_for_malnutrition,Referred for Malnutrition,u5,U5 with malnutrition referred
+referred_for_pnc,Referred for PNC,pnc,PNC referrals
+referred_for_pneumonia,Referred for Pneumonia,u5,U5 with pneumonia referred
+referred_growth_monitoring_female,Referred Growth Monitoring (Female),immunization_status,Female children referred for growth monitoring
+referred_growth_monitoring_male,Referred Growth Monitoring (Male),immunization_status,Male children referred for growth monitoring
+referred_hypertension,Referred Hypertension,over_five,Patients referred for hypertension
+referred_hypertension_female,Referred Hypertension (Female),over_five,Female patients referred for hypertension
+referred_hypertension_male,Referred Hypertension (Male),over_five,Male patients referred for hypertension
+referred_immunization,Referred Immunization,immunization,Patients referred for immunization
+referred_immunization_female,Referred Immunization (Female),immunization,Female patients referred for immunization
+referred_immunization_male,Referred Immunization (Male),immunization,Male patients referred for immunization
+referred_mental_health,Referred Mental Health,over_five,Patients referred for mental health
+referred_mental_health_female,Referred Mental Health (Female),over_five,Female patients referred for mental health
+referred_mental_health_male,Referred Mental Health (Male),over_five,Male patients referred for mental health
+referred_missed_vaccine,Referred Missed Vaccine,immunization_status,Children referred for missed vaccines
+referred_missed_vaccine_female,Referred Missed Vaccine (Female),immunization_status,Female children referred for missed vaccines
+referred_missed_vaccine_male,Referred Missed Vaccine (Male),immunization_status,Male children referred for missed vaccines
+repeat_pregnancies,Repeat Pregnancies,pregnancy,Pregnancies within 12 months of delivery
+screened_diabetes,Screened Diabetes (Patients),over_five,Distinct patients screened for diabetes
+screened_diabetes_female,Screened Diabetes (Female Patients),over_five,Female patients screened for diabetes
+screened_diabetes_male,Screened Diabetes (Male Patients),over_five,Male patients screened for diabetes
+screened_hypertension,Screened Hypertension (Patients),over_five,Distinct patients screened for hypertension
+screened_hypertension_female,Screened Hypertension (Female Patients),over_five,Female patients screened for hypertension
+screened_hypertension_male,Screened Hypertension (Male Patients),over_five,Male patients screened for hypertension
+screened_mental_health,Screened Mental Health (Patients),over_five,Distinct patients screened for mental health
+screened_mental_health_female,Screened Mental Health (Female Patients),over_five,Female patients screened for mental health
+screened_mental_health_male,Screened Mental Health (Male Patients),over_five,Male patients screened for mental health
+screenings_diabetes,Screenings Diabetes (Events),over_five,Total diabetes screening events
+screenings_diabetes_female,Screenings Diabetes (Female Events),over_five,Female diabetes screening events
+screenings_diabetes_male,Screenings Diabetes (Male Events),over_five,Male diabetes screening events
+screenings_hypertension,Screenings Hypertension (Events),over_five,Total hypertension screening events
+screenings_hypertension_female,Screenings Hypertension (Female Events),over_five,Female hypertension screening events
+screenings_hypertension_male,Screenings Hypertension (Male Events),over_five,Male hypertension screening events
+screenings_mental_health,Screenings Mental Health (Events),over_five,Total mental health screening events
+screenings_mental_health_female,Screenings Mental Health (Female Events),over_five,Female mental health screening events
+screenings_mental_health_male,Screenings Mental Health (Male Events),over_five,Male mental health screening events
+skilled_birth_attendance,Skilled Birth Attendance,pnc,Deliveries at health facility
+teen_pregnancies,Teen Pregnancies,pregnancy,Pregnancies ages 10-19
+total_deaths,Total Deaths,death,All death reports
+total_referrals,Total Referrals,referral,Combined U5 and over-5 referrals
+u5_assessed,U5 Assessed,u5,Distinct U5 patients assessed
+u5_assessed_diarrhoea,U5 Assessed Diarrhoea,u5,U5 assessed for diarrhoea
+u5_assessed_diarrhoea_female,U5 Assessed Diarrhoea (Female),u5,Female U5 assessed for diarrhoea
+u5_assessed_diarrhoea_male,U5 Assessed Diarrhoea (Male),u5,Male U5 assessed for diarrhoea
+u5_assessed_exclusive_breastfeeding,U5 Assessed Exclusive Breastfeeding,u5,U5 assessed for breastfeeding
+u5_assessed_malaria,U5 Assessed Malaria,u5,U5 assessed for malaria
+u5_assessed_malaria_female,U5 Assessed Malaria (Female),u5,Female U5 assessed for malaria
+u5_assessed_malaria_male,U5 Assessed Malaria (Male),u5,Male U5 assessed for malaria
+u5_assessed_malnutrition,U5 Assessed Malnutrition,u5,U5 assessed for malnutrition
+u5_assessed_malnutrition_female,U5 Assessed Malnutrition (Female),u5,Female U5 assessed for malnutrition
+u5_assessed_malnutrition_male,U5 Assessed Malnutrition (Male),u5,Male U5 assessed for malnutrition
+u5_assessed_pneumonia,U5 Assessed Pneumonia,u5,U5 assessed for pneumonia
+u5_assessed_pneumonia_female,U5 Assessed Pneumonia (Female),u5,Female U5 assessed for pneumonia
+u5_assessed_pneumonia_male,U5 Assessed Pneumonia (Male),u5,Male U5 assessed for pneumonia
+u5_confirmed_malaria_cases,U5 Confirmed Malaria Cases,u5,Confirmed malaria in U5
+u5_diarrhea_cases,U5 Diarrhoea Cases,u5,Diarrhoea cases in U5
+u5_exclusive_breastfeeding,U5 Exclusive Breastfeeding,u5,U5 exclusively breastfed
+u5_malnutrition_cases,U5 Malnutrition Cases,u5,Malnutrition events in U5
+u5_malnutrition_female,U5 Malnutrition (Female),u5,Female malnutrition events
+u5_malnutrition_male,U5 Malnutrition (Male),u5,Male malnutrition events
+u5_pneumonia_cases,U5 Pneumonia Cases,u5,Pneumonia events in U5
+u5_referred,U5 Referred,u5,U5 patients referred
+u5_referred_female,U5 Referred (Female),u5,Female U5 patients referred
+u5_referred_male,U5 Referred (Male),u5,Male U5 patients referred
+u5_suspected_malaria_cases,U5 Suspected Malaria Cases,u5,Suspected malaria in U5
+u5_tested_malaria,U5 Tested Malaria,u5,U5 tested for malaria via RDT
+u5_treated_diarrhoea,U5 Treated Diarrhoea,u5,U5 treated with ORS or zinc
+u5_treated_malaria,U5 Treated Malaria,u5,U5 treated with AL
+u5_treated_pneumonia,U5 Treated Pneumonia,u5,U5 treated with amoxicillin for pneumonia
+under_1_immunised,Under 1 Immunised,immunization_status,Children with measles 9 complete
+under_1_immunised_female,Under 1 Immunised (Female),immunization_status,Female children with measles 9 complete
+under_1_immunised_male,Under 1 Immunised (Male),immunization_status,Male children with measles 9 complete
+under_5_population,Under 5 Population,population,Total unmuted population under 5
+

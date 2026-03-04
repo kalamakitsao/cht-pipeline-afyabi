@@ -1,0 +1,31 @@
+name: 'afyabi_analytics'
+version: '2.0.0'
+config-version: 2
+
+profile: 'default'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  source_schema: "{{ env_var('POSTGRES_SCHEMA', 'afyabi') }}"
+
+seeds:
+  afyabi_analytics:
+    seed_metric_definitions:
+
+models:
+  afyabi_analytics:
+    staging:
+      +materialized: incremental
+      +tags: ['cadence_hourly', 'staging']
+    intermediate:
+      +materialized: table
+      +tags: ['cadence_hourly', 'intermediate']
+    dimensions:
+      +tags: ['cadence_hourly']
+    marts:
+      +tags: ['cadence_hourly', 'mart']

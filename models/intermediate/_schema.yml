@@ -1,0 +1,12 @@
+version: 2
+models:
+  - name: int_pregnancy_metrics
+  - name: int_u5_metrics
+  - name: int_over_five_metrics
+  - name: int_death_metrics
+  - name: int_pnc_metrics
+  - name: int_pnc_newborn_metrics
+  - name: int_immunization_metrics
+  - name: int_immunization_status_metrics
+  - name: int_household_visit_metrics
+  - name: int_population_household_metrics
