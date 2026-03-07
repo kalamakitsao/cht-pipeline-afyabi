@@ -2,6 +2,7 @@
   config(
     materialized = 'incremental',
     unique_key = 'patient_id',
+    incremental_strategy = 'delete+insert',
     on_schema_change = 'append_new_columns',
     indexes = [
       {'columns': ['patient_id'], 'unique': true},

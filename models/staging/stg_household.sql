@@ -2,6 +2,7 @@
   config(
     materialized = 'incremental',
     unique_key = 'household_id',
+    incremental_strategy = 'delete+insert',
     on_schema_change = 'append_new_columns',
     indexes = [
       {'columns': ['household_id'], 'unique': true},
