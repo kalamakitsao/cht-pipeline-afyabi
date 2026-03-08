@@ -14,7 +14,8 @@
   )
 }}
 
-SELECT uuid,
+SELECT
+    uuid,
     saved_timestamp,
     reported,
     parent_uuid,
@@ -29,4 +30,3 @@ WHERE saved_timestamp > (
     FROM {{ this }}
 )
 {% endif %}
-ORDER BY uuid, saved_timestamp DESC
