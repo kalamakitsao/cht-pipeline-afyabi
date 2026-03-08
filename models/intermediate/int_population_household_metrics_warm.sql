@@ -8,40 +8,20 @@
 {{
   config(
     materialized = 'table',
+    pre_hook = "SET LOCAL work_mem = '512MB'",
     indexes = [
       {'columns': ['chp_area_id', 'period_id']},
       {'columns': ['period_id']}
     ],
-    tags = ['cadence_hourly', 'intermediate']
+    tags = ['cadence_6h', 'intermediate']
   )
 }}
 
-/*
-  int_population_household_metrics: Hybrid approach.
-
-  Driver: pop_static (from stg_patient directly) — NOT mv_location_hierarchy,
-  which may be empty if contact_type values don't match.
-
-  - pop_static: no period dependency, computed once (driver)
-  - pop_age_dependent: CROSS JOIN with periods (age depends on end_date)
-  - ce/ps: UNION ALL with literal dates for partition pruning
-  - hh/sha: cumulative, no period filter
-*/
-
-{% set periods_query %}
-    SELECT period_id, start_date, end_date, (end_date + INTERVAL '1 day')::date AS end_excl
-    FROM {{ ref('dim_period') }} ORDER BY period_id
-{% endset %}
-
-{% if execute %}
-  {% set period_rows = run_query(periods_query) %}
-{% else %}
-  {% set period_rows = [] %}
-{% endif %}
-
 WITH periods AS (
-    SELECT period_id, start_date, end_date
+    SELECT period_id, start_date, end_date,
+           (end_date + INTERVAL '1 day')::date AS end_excl
     FROM {{ ref('dim_period') }}
+    WHERE refresh_tier = 'warm'
 ),
 
 deceased_patients AS (
@@ -119,37 +99,31 @@ sha AS (
     GROUP BY pt.chp_area_id
 ),
 
--- Community events: partition-friendly with literal dates
 ce AS (
-    {% for row in period_rows %}
-    {% if not loop.first %}UNION ALL{% endif %}
     SELECT
-        chp_area_id,
-        {{ row['period_id'] }}::bigint AS period_id,
-        COUNT(uuid) FILTER (WHERE event_types ILIKE '%monthly_cu_meetings%') AS monthly_cu_meetings,
-        COUNT(uuid) FILTER (WHERE event_types != 'monthly_cu_meetings')       AS other_community_events
-    FROM {{ ref('stg_community_event') }}
-    WHERE reported >= '{{ row['start_date'] }}'::date
-      AND reported <  '{{ row['end_excl'] }}'::date
-      AND chp_area_id IS NOT NULL
-    GROUP BY chp_area_id
-    {% endfor %}
+        s.chp_area_id,
+        p.period_id,
+        COUNT(s.uuid) FILTER (WHERE s.event_types ILIKE '%monthly_cu_meetings%') AS monthly_cu_meetings,
+        COUNT(s.uuid) FILTER (WHERE s.event_types != 'monthly_cu_meetings')       AS other_community_events
+    FROM {{ ref('stg_community_event') }} s
+    INNER JOIN periods p
+        ON s.reported >= p.start_date
+       AND s.reported < p.end_excl
+    WHERE s.chp_area_id IS NOT NULL
+    GROUP BY s.chp_area_id, p.period_id
 ),
 
--- People served: partition-friendly with literal dates
 ps AS (
-    {% for row in period_rows %}
-    {% if not loop.first %}UNION ALL{% endif %}
     SELECT
-        chp_area_id,
-        {{ row['period_id'] }}::bigint AS period_id,
-        COUNT(DISTINCT patient_id)      AS people_served
-    FROM {{ ref('stg_data_record') }}
-    WHERE reported >= '{{ row['start_date'] }}'::date
-      AND reported <  '{{ row['end_excl'] }}'::date
-      AND chp_area_id IS NOT NULL
-    GROUP BY chp_area_id
-    {% endfor %}
+        s.chp_area_id,
+        p.period_id,
+        COUNT(DISTINCT s.patient_id) AS people_served
+    FROM {{ ref('stg_data_record') }} s
+    INNER JOIN periods p
+        ON s.reported >= p.start_date
+       AND s.reported < p.end_excl
+    WHERE s.chp_area_id IS NOT NULL
+    GROUP BY s.chp_area_id, p.period_id
 )
 
 SELECT
