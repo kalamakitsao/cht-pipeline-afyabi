@@ -14,8 +14,7 @@
   )
 }}
 
-SELECT DISTINCT ON (uuid)
-    uuid,
+SELECT uuid,
     saved_timestamp,
     reported,
     parent_uuid,
