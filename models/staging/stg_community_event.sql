@@ -2,6 +2,7 @@
   config(
     materialized = 'incremental',
     unique_key = 'uuid',
+    incremental_strategy = 'delete+insert',
     on_schema_change = 'append_new_columns',
     indexes = [
       {'columns': ['uuid'], 'unique': true},
@@ -13,7 +14,7 @@
   )
 }}
 
-SELECT
+SELECT DISTINCT ON (uuid)
     uuid,
     saved_timestamp,
     reported_by,
@@ -28,3 +29,4 @@ WHERE saved_timestamp > (
     FROM {{ this }}
 )
 {% endif %}
+ORDER BY uuid, saved_timestamp DESC

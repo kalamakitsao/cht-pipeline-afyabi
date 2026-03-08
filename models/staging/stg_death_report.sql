@@ -14,6 +14,19 @@
   )
 }}
 
+WITH deduped AS (
+    SELECT
+        d.*,
+        ROW_NUMBER() OVER (PARTITION BY d.uuid ORDER BY d.saved_timestamp DESC) AS rn
+    FROM {{ source(var('source_schema'), 'death_report') }} d
+    {% if is_incremental() %}
+    WHERE d.saved_timestamp > (
+        SELECT COALESCE(MAX(saved_timestamp), '2020-01-01'::timestamp)
+        FROM {{ this }}
+    )
+    {% endif %}
+)
+
 SELECT
     d.uuid,
     d.saved_timestamp,
@@ -26,11 +39,6 @@ SELECT
     d.patient_age_in_days,
     d.date_of_death,
     d.death_type
-FROM {{ source(var('source_schema'), 'death_report') }} d
+FROM deduped d
 LEFT JOIN {{ ref('stg_patient_sex_lookup') }} p ON p.patient_id = d.patient_id
-{% if is_incremental() %}
-WHERE d.saved_timestamp > (
-    SELECT COALESCE(MAX(saved_timestamp), '2020-01-01'::timestamp)
-    FROM {{ this }}
-)
-{% endif %}
+WHERE d.rn = 1

@@ -15,7 +15,7 @@
   )
 }}
 
-SELECT
+SELECT DISTINCT ON (uuid)
     uuid,
     saved_timestamp,
     reported,
@@ -29,3 +29,4 @@ WHERE saved_timestamp > (
     FROM {{ this }}
 )
 {% endif %}
+ORDER BY uuid, saved_timestamp DESC

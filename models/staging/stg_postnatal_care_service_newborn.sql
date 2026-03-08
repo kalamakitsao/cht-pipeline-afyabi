@@ -15,7 +15,7 @@
 }}
 
 SELECT
-    uuid,
+    SELECT DISTINCT ON (uuid)
     saved_timestamp,
     reported_by,
     reported_by_parent          AS chp_area_id,
@@ -34,3 +34,4 @@ WHERE saved_timestamp > (
     FROM {{ this }}
 )
 {% endif %}
+ORDER BY uuid, saved_timestamp DESC

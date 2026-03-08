@@ -15,7 +15,7 @@
   )
 }}
 
-SELECT
+SELECT DISTINCT ON (uuid)
     uuid,
     saved_timestamp,
     reported,
@@ -31,3 +31,4 @@ WHERE patient_id IS NOT NULL
       FROM {{ this }}
   )
 {% endif %}
+ORDER BY uuid, saved_timestamp DESC

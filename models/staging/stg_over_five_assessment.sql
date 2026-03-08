@@ -14,10 +14,35 @@
   )
 }}
 
-/*
-  stg_over_five_assessment: Over-5 assessments with sex denormalized.
-  Source: 30M rows, 13GB. Largest assessment table.
-*/
+WITH deduped AS (
+    SELECT DISTINCT ON (uuid)
+        uuid,
+        saved_timestamp,
+        reported_by,
+        reported_by_parent,
+        reported_by_parent_parent,
+        reported,
+        patient_id,
+        screened_for_diabetes,
+        is_referred_diabetes,
+        screened_for_hypertension,
+        is_referred_hypertension,
+        screened_for_mental_health,
+        is_referred_mental_health,
+        has_fever,
+        rdt_result,
+        repeat_rdt_result,
+        given_al,
+        has_been_referred
+    FROM {{ source(var('source_schema'), 'over_five_assessment') }}
+    {% if is_incremental() %}
+    WHERE saved_timestamp > (
+        SELECT COALESCE(MAX(saved_timestamp), '2020-01-01'::timestamp)
+        FROM {{ this }}
+    )
+    {% endif %}
+    ORDER BY uuid, saved_timestamp DESC
+)
 
 SELECT
     a.uuid,
@@ -39,11 +64,5 @@ SELECT
     a.repeat_rdt_result,
     a.given_al,
     a.has_been_referred
-FROM {{ source(var('source_schema'), 'over_five_assessment') }} a
+FROM deduped a
 LEFT JOIN {{ ref('stg_patient_sex_lookup') }} p ON p.patient_id = a.patient_id
-{% if is_incremental() %}
-WHERE a.saved_timestamp > (
-    SELECT COALESCE(MAX(saved_timestamp), '2020-01-01'::timestamp)
-    FROM {{ this }}
-)
-{% endif %}

@@ -14,6 +14,28 @@
   )
 }}
 
+WITH deduped AS (
+    SELECT DISTINCT ON (uuid)
+        uuid,
+        saved_timestamp,
+        reported_by,
+        reported_by_parent,
+        reported,
+        patient_id,
+        is_dewormed,
+        is_referred_vitamin_a,
+        is_referred_immunization,
+        is_referred_growth_monitoring
+    FROM {{ source(var('source_schema'), 'immunization') }}
+    {% if is_incremental() %}
+    WHERE saved_timestamp > (
+        SELECT COALESCE(MAX(saved_timestamp), '2020-01-01'::timestamp)
+        FROM {{ this }}
+    )
+    {% endif %}
+    ORDER BY uuid, saved_timestamp DESC
+)
+
 SELECT
     i.uuid,
     i.saved_timestamp,
@@ -26,11 +48,5 @@ SELECT
     i.is_referred_vitamin_a,
     i.is_referred_immunization,
     i.is_referred_growth_monitoring
-FROM {{ source(var('source_schema'), 'immunization') }} i
+FROM deduped i
 LEFT JOIN {{ ref('stg_patient_sex_lookup') }} p ON p.patient_id = i.patient_id
-{% if is_incremental() %}
-WHERE i.saved_timestamp > (
-    SELECT COALESCE(MAX(saved_timestamp), '2020-01-01'::timestamp)
-    FROM {{ this }}
-)
-{% endif %}
