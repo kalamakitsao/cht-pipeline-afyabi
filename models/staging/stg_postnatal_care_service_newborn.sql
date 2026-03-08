@@ -14,8 +14,8 @@
   )
 }}
 
-SELECT
-    SELECT DISTINCT ON (uuid)
+SELECT DISTINCT ON (uuid)
+    uuid,
     saved_timestamp,
     reported_by,
     reported_by_parent          AS chp_area_id,
