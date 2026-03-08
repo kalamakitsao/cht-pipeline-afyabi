@@ -13,11 +13,11 @@
 
 /*
   fact_aggregate: Central EAV fact table.
-  All 10 domains are tiered (hot/warm/cold).
-  Each metric selects from all 3 tiers via UNION ALL.
+  9 domains are tiered (hot/warm/cold).
+  1 domain (population_household) is single (not tiered — scans all patients regardless).
 */
 
-{% set domains = [
+{% set tiered_domains = [
     {
         'base': 'int_u5_metrics',
         'metrics': [
@@ -57,18 +57,6 @@
     {
         'base': 'int_household_visit_metrics',
         'metrics': ['hh_visited', 'chps_reporting']
-    },
-    {
-        'base': 'int_population_household_metrics',
-        'metrics': [
-            'population', 'population_female', 'population_male',
-            'under_5_population', 'population_under_5_female', 'population_under_5_male',
-            'children_turning_one', 'female_turning_one', 'male_turning_one',
-            'households_registered',
-            'households_assessed_sha', 'households_registered_on_sha', 'households_with_sha',
-            'monthly_cu_meetings', 'other_community_events',
-            'people_served'
-        ]
     },
     {
         'base': 'int_pregnancy_metrics',
@@ -116,10 +104,27 @@
     }
 ] %}
 
+{% set single_domains = [
+    {
+        'ref': 'int_population_household_metrics',
+        'metrics': [
+            'population', 'population_female', 'population_male',
+            'under_5_population', 'population_under_5_female', 'population_under_5_male',
+            'children_turning_one', 'female_turning_one', 'male_turning_one',
+            'households_registered',
+            'households_assessed_sha', 'households_registered_on_sha', 'households_with_sha',
+            'monthly_cu_meetings', 'other_community_events',
+            'people_served'
+        ]
+    }
+] %}
+
 {% set tiers = ['hot', 'warm', 'cold'] %}
 
 {% set is_first = [true] %}
-{% for domain in domains %}
+
+{# ── Tiered domains ── #}
+{% for domain in tiered_domains %}
 {% for metric in domain['metrics'] %}
 {% for tier in tiers %}
 {% if not is_first[0] %}
@@ -134,5 +139,19 @@ SELECT
     last_updated
 FROM {{ ref(domain['base'] ~ '_' ~ tier) }}
 {% endfor %}
+{% endfor %}
+{% endfor %}
+
+{# ── Single (non-tiered) domains ── #}
+{% for domain in single_domains %}
+{% for metric in domain['metrics'] %}
+UNION ALL
+SELECT
+    chp_area_id     AS location_id,
+    period_id,
+    '{{ metric }}'  AS metric_id,
+    COALESCE({{ metric }}, 0)::bigint AS value,
+    last_updated
+FROM {{ ref(domain['ref']) }}
 {% endfor %}
 {% endfor %}
