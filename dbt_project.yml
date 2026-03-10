@@ -16,6 +16,7 @@ vars:
 seeds:
   afyabi_analytics:
     seed_metric_definitions:
+      +schema: analytics
 
 models:
   afyabi_analytics:

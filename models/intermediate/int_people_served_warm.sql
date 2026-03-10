@@ -1,4 +1,3 @@
--- depends_on: {{ ref('stg_data_record') }}
 -- depends_on: {{ ref('dim_period') }}
 {{
   config(
@@ -13,18 +12,24 @@
 }}
 
 /*
-  int_people_served_warm: Distinct patients served by CHP area × period.
-  Source: stg_data_record (57M rows).
+  int_people_served_warm: Distinct patients served by CHP area x period.
+  
+  Queries the PARTITIONED source table directly instead of stg_data_record.
+  The source (data_record) is partitioned by RANGE(reported) with 77+ partitions.
+  PostgreSQL prunes to only the relevant partitions for each period's date range.
+  
+  Column mapping: parent_uuid = chp_area_id, patient_id = patient_id
 */
 
 SELECT
-    s.chp_area_id,
+    s.parent_uuid       AS chp_area_id,
     p.period_id,
     COUNT(DISTINCT s.patient_id) AS people_served
-FROM {{ ref('stg_data_record') }} s
+FROM {{ source(var('source_schema'), 'data_record') }} s
 INNER JOIN {{ ref('dim_period') }} p
     ON s.reported >= p.start_date
    AND s.reported < (p.end_date + INTERVAL '1 day')
-WHERE s.chp_area_id IS NOT NULL
+WHERE s.parent_uuid IS NOT NULL
+  AND s.patient_id IS NOT NULL
   AND p.refresh_tier = 'warm'
-GROUP BY s.chp_area_id, p.period_id
+GROUP BY s.parent_uuid, p.period_id

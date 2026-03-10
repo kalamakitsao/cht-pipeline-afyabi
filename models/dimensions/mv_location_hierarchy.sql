@@ -12,30 +12,26 @@
 }}
 
 /*
-  Denormalized location hierarchy built by self-joining dim_location
-  4 levels deep via parent_uuid.
-  
-  Hierarchy: county → sub_county → community_unit → chp_area
-  
-  contact_type values:
-    a_]county                              = County
-    b_sub_county                           = Sub-county
-    c_community_health_unit                = Community Unit (CU)
-    d_community_health_volunteer_area      = CHP Area (finest grain)
+  Denormalized location hierarchy.
+  Base: chp_hierarchy (pre-flattened).
+  IDs: dim_location provides sub_county_id and county_id.
+  DISTINCT ON: ensures one row per chp_area_uuid in case chp_hierarchy
+  has duplicates (multiple records per CHP area).
 */
 
-SELECT
-    chp.location_id     AS chp_area_id,
-    chp.name            AS chp_area,
-    cu.location_id      AS community_unit_id,
-    cu.name             AS community_unit,
-    sc.location_id      AS sub_county_id,
-    sc.name             AS sub_county,
-    co.location_id      AS county_id,
-    co.name             AS county
-FROM {{ ref('dim_location') }} chp
-LEFT JOIN {{ ref('dim_location') }} cu  ON cu.location_id  = chp.parent_uuid
-LEFT JOIN {{ ref('dim_location') }} sc  ON sc.location_id  = cu.parent_uuid
-LEFT JOIN {{ ref('dim_location') }} co  ON co.location_id  = sc.parent_uuid
-WHERE chp.contact_type = 'd_community_health_volunteer_area'
-  AND chp.muted IS NULL
+SELECT DISTINCT ON (h.chp_area_uuid)
+    h.chp_area_uuid     AS chp_area_id,
+    h.chp_area_name      AS chp_area,
+    h.chu_uuid           AS community_unit_id,
+    h.chu_name           AS community_unit,
+    sc.location_id       AS sub_county_id,
+    h.sub_county_name    AS sub_county,
+    co.location_id       AS county_id,
+    h.county_name        AS county
+FROM {{ source(var('source_schema'), 'chp_hierarchy') }} h
+LEFT JOIN {{ ref('dim_location') }} cu ON cu.location_id = h.chu_uuid
+LEFT JOIN {{ ref('dim_location') }} sc ON sc.location_id = cu.parent_uuid
+LEFT JOIN {{ ref('dim_location') }} co ON co.location_id = sc.parent_uuid
+WHERE h.chp_muted IS NULL
+  AND h.chp_area_uuid IS NOT NULL
+ORDER BY h.chp_area_uuid, h.saved_timestamp DESC

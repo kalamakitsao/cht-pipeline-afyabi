@@ -13,8 +13,10 @@
 
 /*
   fact_aggregate: Central EAV fact table.
-  9 domains are tiered (hot/warm/cold).
-  1 domain (population_household) is single (not tiered — scans all patients regardless).
+  - 11 tiered domains (hot/warm/cold)
+  - 1 single domain (population_household)
+  - 1 period-independent domain (chp_metrics) cross-joined with dim_period
+  - 1 alias (referred_for_developmental_delays)
 */
 
 {% set tiered_domains = [
@@ -101,6 +103,14 @@
             'referred_growth_monitoring_female', 'referred_growth_monitoring_male',
             'referred_missed_vaccine', 'referred_missed_vaccine_female', 'referred_missed_vaccine_male'
         ]
+    },
+    {
+        'base': 'int_chps_meeting_target',
+        'metrics': ['chps_meeting_target']
+    },
+    {
+        'base': 'int_total_referrals',
+        'metrics': ['total_referrals']
     }
 ] %}
 
@@ -116,6 +126,15 @@
             'monthly_cu_meetings', 'other_community_events',
             'people_served'
         ]
+    }
+] %}
+
+{# Aliased metrics: same source column, different metric_id #}
+{% set aliases = [
+    {
+        'base': 'int_u5_metrics',
+        'source_column': 'referred_for_development_milestones',
+        'metric_id': 'referred_for_developmental_delays'
     }
 ] %}
 
@@ -153,5 +172,32 @@ SELECT
     COALESCE({{ metric }}, 0)::bigint AS value,
     last_updated
 FROM {{ ref(domain['ref']) }}
+{% endfor %}
+{% endfor %}
+
+{# ── Period-independent domain: chp_metrics (cross-join with periods) ── #}
+{% for metric in ['chps_enrolled', 'chps_with_hholds'] %}
+UNION ALL
+SELECT
+    c.chp_area_id   AS location_id,
+    p.period_id,
+    '{{ metric }}'   AS metric_id,
+    COALESCE(c.{{ metric }}, 0)::bigint AS value,
+    c.last_updated
+FROM {{ ref('int_chp_metrics') }} c
+CROSS JOIN {{ ref('dim_period') }} p
+{% endfor %}
+
+{# ── Aliased metrics ── #}
+{% for alias in aliases %}
+{% for tier in tiers %}
+UNION ALL
+SELECT
+    chp_area_id     AS location_id,
+    period_id,
+    '{{ alias['metric_id'] }}'  AS metric_id,
+    COALESCE({{ alias['source_column'] }}, 0)::bigint AS value,
+    last_updated
+FROM {{ ref(alias['base'] ~ '_' ~ tier) }}
 {% endfor %}
 {% endfor %}
