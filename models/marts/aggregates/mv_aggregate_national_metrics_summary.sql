@@ -29,7 +29,7 @@ SELECT
     MAX(fa.last_updated)     AS last_updated
 FROM {{ ref('fact_aggregate') }} fa
 INNER JOIN {{ ref('dim_period') }} dp ON dp.period_id = fa.period_id
-INNER JOIN {{ ref('dim_metric') }} dm ON dm.metric_id = fa.metric_id
+INNER JOIN {{ source(var('source_schema'), 'dim_metric') }} dm ON dm.metric_id = fa.metric_id
 GROUP BY
     dp.start_date, dp.end_date, dp.label,
     dm.group_name, dm.metric_group_id, dm.name,

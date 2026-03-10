@@ -30,7 +30,7 @@ SELECT
 FROM {{ ref('fact_aggregate') }} fa
 INNER JOIN {{ ref('mv_location_hierarchy') }} lh ON lh.chp_area_id = fa.location_id
 INNER JOIN {{ ref('dim_period') }} dp ON dp.period_id = fa.period_id
-INNER JOIN {{ ref('dim_metric') }} dm ON dm.metric_id = fa.metric_id
+INNER JOIN {{ source(var('source_schema'), 'dim_metric') }} dm ON dm.metric_id = fa.metric_id
 GROUP BY
     lh.county_id, lh.county,
     lh.sub_county_id, lh.sub_county,
