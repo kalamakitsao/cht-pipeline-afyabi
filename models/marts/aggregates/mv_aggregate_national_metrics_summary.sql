@@ -11,26 +11,29 @@
 
 /*
   National-level aggregation.
-  Sums all CHP areas. No location join needed — just aggregate everything.
+  Group by the true grain only: (period_id, metric_id).
+  Descriptive columns are projected with MAX() so label drift never creates
+  duplicate business keys.
 */
 
 SELECT
     'national'               AS level,
     'Kenya'                  AS name,
-    dp.start_date            AS period_start,
-    dp.end_date              AS period_end,
-    dp.label                 AS period_label,
-    dm.group_name            AS metric_group,
-    dm.metric_group_id,
-    dm.name                  AS metric,
+    MAX(dp.start_date)       AS period_start,
+    MAX(dp.end_date)         AS period_end,
+    MAX(dp.label)            AS period_label,
+    MAX(dm.group_name)       AS metric_group,
+    MAX(dm.metric_group_id)  AS metric_group_id,
+    MAX(dm.name)             AS metric,
     SUM(fa.value)            AS value,
     fa.period_id,
     fa.metric_id,
     MAX(fa.last_updated)     AS last_updated
 FROM {{ ref('fact_aggregate') }} fa
-INNER JOIN {{ ref('dim_period') }} dp ON dp.period_id = fa.period_id
-INNER JOIN {{ source(var('source_schema'), 'dim_metric') }} dm ON dm.metric_id = fa.metric_id
+INNER JOIN {{ ref('dim_period') }} dp
+    ON dp.period_id = fa.period_id
+INNER JOIN {{ source(var('source_schema'), 'dim_metric') }} dm
+    ON dm.metric_id = fa.metric_id
 GROUP BY
-    dp.start_date, dp.end_date, dp.label,
-    dm.group_name, dm.metric_group_id, dm.name,
-    fa.period_id, fa.metric_id
+    fa.period_id,
+    fa.metric_id
