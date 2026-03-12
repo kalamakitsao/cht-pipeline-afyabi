@@ -1,0 +1,37 @@
+{{ config(materialized='table', tags=['supervision','scorecard','cadence_hourly']) }}
+
+SELECT
+    community_unit_id,
+    community_unit,
+    sub_county_id,
+    sub_county,
+    county_id,
+    county,
+    COUNT(DISTINCT chp_area_id) AS chp_areas,
+    SUM(households_registered) AS households_registered,
+    SUM(households_served_90d) AS households_served_90d,
+    ROUND(100.0 * SUM(households_served_90d) / NULLIF(SUM(households_registered), 0), 1) AS pct_households_served_90d,
+    SUM(forms_submitted_90d) AS forms_submitted_90d,
+    SUM(distinct_services_provided_90d) AS distinct_services_provided_90d,
+    SUM(people_served_90d) AS people_served_90d,
+    SUM(households_zero_members) AS households_zero_members,
+    ROUND(100.0 * SUM(households_zero_members) / NULLIF(SUM(households_registered), 0), 1) AS pct_households_zero_members,
+    SUM(households_one_member) AS households_one_member,
+    ROUND(100.0 * SUM(households_one_member) / NULLIF(SUM(households_registered), 0), 1) AS pct_households_one_member,
+    SUM(households_gt_15_members) AS households_gt_15_members,
+    ROUND(100.0 * SUM(households_gt_15_members) / NULLIF(SUM(households_registered), 0), 1) AS pct_households_gt_15_members,
+    ROUND(AVG(avg_people_per_household), 2) AS avg_people_per_household,
+    SUM(households_registered_on_sha) AS households_registered_on_sha,
+    ROUND(100.0 * SUM(households_registered_on_sha) / NULLIF(SUM(households_registered), 0), 1) AS pct_households_registered_on_sha,
+    SUM(active_chp_area_30d) AS active_chp_areas_30d,
+    ROUND(100.0 * SUM(active_chp_area_30d) / NULLIF(COUNT(DISTINCT chp_area_id), 0), 1) AS pct_active_chp_areas_30d,
+    ROUND(SUM(households_registered)::numeric / NULLIF(COUNT(DISTINCT chp_area_id), 0), 1) AS households_per_chp_area,
+    SUM(households_no_service_90d) AS households_no_service_90d,
+    ROUND(100.0 * SUM(households_no_service_90d) / NULLIF(SUM(households_registered), 0), 1) AS pct_households_no_service_90d,
+    SUM(has_zero_households) AS chp_areas_zero_households,
+    ROUND(100.0 * SUM(has_zero_households) / NULLIF(COUNT(DISTINCT chp_area_id), 0), 1) AS pct_chp_areas_zero_households,
+    SUM(total_people) AS total_people,
+    SUM(people_missing_household_link) AS people_missing_household_link,
+    ROUND(100.0 * SUM(people_missing_household_link) / NULLIF(SUM(total_people), 0), 2) AS pct_people_missing_household_link
+FROM {{ ref('fct_supervision_chp_area') }}
+GROUP BY 1,2,3,4,5,6
